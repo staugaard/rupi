@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..' , 'lib'))
+
+require 'rubygems'
+require 'rupi'
+
+include Rupi
+
+load ARGV[0]
+
+if Rupi::Pin.watching?
+  trap("SIGINT") { Rupi::Pin.stop_watching }
+  Rupi::Pin.join_watch_thread
+end
