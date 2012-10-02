@@ -1,0 +1,66 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'rupi'
+require 'daemons'
+require 'yaml'
+
+include Rupi
+
+def sudome
+  return if ENV["USER"] == 'root'
+  exec("rvmsudo #{ENV['_']} #{ARGV.join(' ')}")
+end
+
+if ARGV[0] == 'install'
+  file_name = ARGV[1]
+
+  if file_name.nil?
+    puts "please specify a rupi script to run"
+    exit(1)
+  end
+
+  file_name = File.absolute_path(file_name)
+
+  unless File.exist?(file_name)
+    puts "#{file_name} not found"
+    exit(1)
+  end
+
+  sudome
+
+  File.open('/etc/rupi_service.yml', 'w') do |config|
+    config.write(YAML::dump('path' => file_name))
+  end
+
+  system('rvm wrapper 1.9.3 init rupi_service')
+  system('mv `which init_rupi_service` /etc/init.d/rupi_service')
+  system('update-rc.d rupi_service defaults')
+  system('/etc/init.d/rupi_service restart')
+  exit
+end
+
+
+Daemons.run_proc('rupi_service') do
+  config = YAML.load(File.read('/etc/rupi_service.yml'))
+  file_name = config['path']
+  update_at = nil
+  run_thread = nil
+
+  loop do
+    new_updated_at = File.mtime(file_name).to_i
+
+    if new_updated_at != update_at
+      Rupi::Pin.unwatch(:all)
+      Rupi::Pin.stop_watching
+      Rupi::Pin.join_watch_thread
+      run_thread.terminate if run_thread
+
+      run_thread = Thread.new { load(file_name) }
+
+      update_at = new_updated_at
+    end
+
+    sleep 1
+  end
+end

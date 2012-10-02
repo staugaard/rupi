@@ -64,6 +64,15 @@ module Rupi
       start_watching
     end
 
+    def self.unwatch(pin)
+      return unless @watched_pins
+      if pin == :all
+        @watched_pins.clear
+      else
+        @watched_pins.delete(pin)
+      end
+    end
+
     def self.start_watching
       @watching = true
 
@@ -88,6 +97,7 @@ module Rupi
 
     def self.stop_watching
       @watching = false
+      join_watch_thread
     end
 
     def self.watching?
@@ -95,6 +105,7 @@ module Rupi
     end
 
     def self.join_watch_thread
+      return unless @watch_thread
       @watch_thread.join
     end
 
