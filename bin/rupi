@@ -1,5 +1,9 @@
 #!/usr/bin/env ruby
 
+if ENV["USER"] != 'root'
+  exec("rvmsudo #{ENV['_']} #{ARGV.join(' ')}")
+end
+
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..' , 'lib'))
 
 require 'rubygems'
