@@ -18,4 +18,6 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'wiringpi'
   gem.add_dependency 'daemons'
+
+  gem.add_development_dependency 'rake'
 end
