@@ -41,7 +41,7 @@ if ARGV[0] == 'install'
 end
 
 
-Daemons.run_proc('rupi_service') do
+Daemons.run_proc('rupi_service', :dir_mode => :system, :log_output => true, :backtrace => true) do
   config = YAML.load(File.read('/etc/rupi_service.yml'))
   file_name = config['path']
   update_at = nil
