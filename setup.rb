@@ -58,9 +58,9 @@ policy :rupi, :roles => :raspberrypi do
 end
 
 deployment do
-  delivery :ssh do
-  	user 'pi'
-  	password 'raspberry'
-  	roles :raspberrypi => 'raspberrypi.local'
-  end
+	delivery :capistrano do
+		set :user, 'pi'
+		role :raspberrypi, 'raspberrypi.local', :primary => true
+		recipes 'deploy'
+	end
 end
