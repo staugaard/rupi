@@ -75,8 +75,10 @@ module Rupi
     def self.unwatch(pin)
       return unless @watched_pins
       if pin == :all
-        @watched_pins.clear
+        @watched_pins.keys.each { |p| unwatch(p) }
       else
+        pin.down_handlers.clear
+        pin.up_handlers.clear
         @watched_pins.delete(pin)
       end
     end
@@ -98,14 +100,15 @@ module Rupi
             @watched_pins[pin] = value
           end
           sleep(0.1)
-
         end
+
       end
     end
 
     def self.stop_watching
       @watching = false
       join_watch_thread
+      @watch_thread = nil
     end
 
     def self.watching?

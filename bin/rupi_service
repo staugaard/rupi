@@ -56,7 +56,10 @@ Daemons.run_proc('rupi_service', :dir_mode => :system, :log_output => true, :bac
       Rupi::Pin.join_watch_thread
       run_thread.terminate if run_thread
 
-      run_thread = Thread.new { load(file_name) }
+      run_thread = Thread.new do
+        puts "loading rupi program from #{file_name}"
+        load(file_name)
+      end
 
       update_at = new_updated_at
     end
