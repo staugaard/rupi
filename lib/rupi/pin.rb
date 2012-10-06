@@ -2,6 +2,13 @@ require 'wiringpi'
 
 module Rupi
   class Pin
+
+    class GPIO < WiringPi::GPIO
+      def pullUpDnControl(pin, pud)
+        Wiringpi.pullUpDnControl(pin, pud)
+      end
+    end
+
     attr_reader :number, :up_handlers, :down_handlers
 
     def initialize(number)
@@ -16,11 +23,12 @@ module Rupi
     end
 
     def self.gpio
-      @gpio ||= WiringPi::GPIO.new
+      @gpio ||= GPIO.new
     end
 
-    def input!
+    def input!(pud = PUD_DOWN)
       gpio.mode(number, INPUT)
+      gpio.pullUpDnControl(number, pud) if pud
     end
 
     def output!
