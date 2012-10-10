@@ -44,12 +44,15 @@ package :rupi do
   requires :rvm
 	requires :ruby
 
+	apt 'uvccapture'
+
 	noop do
 		pre :install, '~/.rvm/bin/gem install rupi --no-rdoc --no-ri'
 	end
 
 	verify do
 		has_executable '~/.rvm/gems/ruby-1.9.3-p194/bin/rupi'
+		has_executable 'uvccapture'
 	end
 end
 

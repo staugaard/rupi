@@ -1,5 +1,6 @@
 require "rupi/version"
 require 'rupi/pin'
+require 'rupi/camera'
 
 module Rupi
   PIN0  = Pin.new(0)
