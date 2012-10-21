@@ -1,3 +1,5 @@
+require 'rupi/version'
+
 Sprinkle::Installers::Apt.class_eval do
   alias_method :install_commands_original, :install_commands
 
@@ -26,19 +28,19 @@ package :ruby_dependencies do
 end
 
 package :ruby do
-  description 'Ruby 1.9.3'
-  version 'ruby-1.9.3-p194'
+  description Rupi::RUBY_VERSION
+  version Rupi::RUBY_VERSION
   requires :rvm
   requires :ruby_dependencies
 
   noop do
-    pre :install, "sudo #{RVM_EXECUTABLE} mount -r https://s3.amazonaws.com/rvm-pi/debian/wheezy_sid/armv6l/ruby-1.9.3-p194.tar.bz2 --verify-downloads 1"
-    # pre :install, "sudo #{RVM_EXECUTABLE} install ruby-1.9.3-p194 --trace"
-    post :install, "#{RVM_EXECUTABLE} use ruby-1.9.3-p194 --default"
+    pre :install, "sudo #{RVM_EXECUTABLE} mount -r https://s3.amazonaws.com/rvm-pi/debian/wheezy_sid/armv6l/#{Rupi::RUBY_VERSION}.tar.bz2 --verify-downloads 1"
+    # pre :install, "sudo #{RVM_EXECUTABLE} install #{Rupi::RUBY_VERSION} --trace"
+    post :install, "#{RVM_EXECUTABLE} use #{Rupi::RUBY_VERSION} --default"
   end
 
   verify do
-    has_executable "#{RVM_PATH}/rubies/ruby-1.9.3-p194/bin/ruby"
+    has_executable "#{RVM_PATH}/rubies/#{Rupi::RUBY_VERSION}/bin/ruby"
   end
 end
 
@@ -50,11 +52,11 @@ package :rupi do
   apt 'uvccapture'
 
   noop do
-    pre :install, "#{RVM_PATH}/bin/gem-ruby-1.9.3-p194 install rupi --no-rdoc --no-ri"
+    pre :install, "#{RVM_PATH}/bin/gem-#{Rupi::RUBY_VERSION} install rupi --no-rdoc --no-ri"
   end
 
   verify do
-    has_executable "#{RVM_PATH}/gems/ruby-1.9.3-p194/bin/rupi"
+    has_executable "#{RVM_PATH}/gems/#{Rupi::RUBY_VERSION}/bin/rupi"
     has_executable 'uvccapture'
   end
 end

@@ -33,7 +33,7 @@ if ARGV[0] == 'install'
     config.write(YAML::dump('path' => file_name))
   end
 
-  system('rvm wrapper 1.9.3 init rupi_service')
+  system("rvm wrapper #{Rupi::RUBY_VERSION} init rupi_service")
   system('mv `which init_rupi_service` /etc/init.d/rupi_service')
   system('update-rc.d rupi_service defaults')
   system('/etc/init.d/rupi_service restart')
