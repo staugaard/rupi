@@ -94,7 +94,11 @@ module Rupi
             if previous_value && previous_value != value
               handlers = value == 1 ? pin.up_handlers : pin.down_handlers
               handlers.each do |handler|
-                handler.call(value)
+                begin
+                  handler.call(value)
+                rescue StandardError => e
+                  puts e
+                end
               end
             end
             @watched_pins[pin] = value
