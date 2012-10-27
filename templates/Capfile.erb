@@ -1,7 +1,7 @@
 require 'rupi/capistrano'
 
 set :application, '<%= name %>'
-set :deploy_to,   "/home/pi/#{application}"
+set :deploy_to,   '/home/pi/<%= name %>'
 set :user,        'pi'
 
 role :raspberrypi, 'raspberrypi.local'
