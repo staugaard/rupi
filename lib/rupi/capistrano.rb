@@ -18,7 +18,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
 
     task :setup_service do
-      run "bash -c 'source /etc/profile.d/rvm.sh && cd #{deploy_to} && bundle exec rupi_service install app.rb'"
+      run "bash -c 'source /etc/profile.d/rvm.sh && rupi_service install #{deploy_to}/app.rb'"
     end
 
     desc 'deploy the app'
@@ -42,7 +42,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
 
     task :bundle do
-      run "bash -c 'source /etc/profile.d/rvm.sh && cd #{deploy_to} && bundle check || bundle --deployment'"
+      run "bash -c 'source /etc/profile.d/rvm.sh && cd #{deploy_to} && bundle check || bundle install --deployment'"
     end
   end
 
