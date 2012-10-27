@@ -1,3 +1,4 @@
+require 'bundler/setup'
 require 'sprinkle'
 
 Capistrano::Configuration.instance(:must_exist).load do
@@ -38,7 +39,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
 
     task :update_code do
-      upload("#{File.dirname(__FILE__)}", "#{deploy_to}", :via => :scp, :recursive => true)
+      upload(Bundler.root.to_s, "#{deploy_to}", :via => :scp, :recursive => true)
     end
 
     task :bundle do
