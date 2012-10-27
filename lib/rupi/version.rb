@@ -1,4 +1,4 @@
 module Rupi
-  VERSION = '0.4.3'
+  VERSION = '0.4.4'
   RUBY_VERSION = 'ruby-1.9.3-p194'
 end
