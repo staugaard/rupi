@@ -11,7 +11,7 @@ Gem::Specification.new do |gem|
   gem.summary       = 'Provides a very natural ruby interface for interacting with GPIO on the Raspberry Pi'
   gem.homepage      = ''
 
-  gem.files         = Dir.glob('{bin,lib,test}/**/*') + ['README.md']
+  gem.files         = Dir.glob('{bin,lib,test,templates}/**/*') + ['README.md']
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ['lib']
