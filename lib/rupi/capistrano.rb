@@ -39,7 +39,9 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
 
     task :update_code do
-      upload(Bundler.root.to_s, "#{deploy_to}", :via => :scp, :recursive => true)
+      Bundler.root.children.each do |file|
+        upload(file.to_s, "#{deploy_to}", :via => :scp, :recursive => true)
+      end
     end
 
     task :bundle do
