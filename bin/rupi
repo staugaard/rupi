@@ -1,19 +1,25 @@
 #!/usr/bin/env ruby
 
-if ENV["USER"] != 'root'
-  exec("rvmsudo #{ENV['_']} #{ARGV.join(' ')}")
-end
-
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..' , 'lib'))
 
-require 'rubygems'
-require 'rupi'
+if ['new', 'help'].include?(ARGV[0])
+  require 'rupi/generator'
+  Rupi::Generator.start
+else
+  if ENV['USER'] != 'root'
+    exec("rvmsudo #{ENV['_']} #{ARGV.join(' ')}")
+  end
 
-include Rupi
 
-load ARGV[0]
+  require 'rubygems'
+  require 'rupi'
 
-if Rupi::Pin.watching?
-  trap("SIGINT") { Rupi::Pin.stop_watching }
-  Rupi::Pin.join_watch_thread
+  include Rupi
+
+  load ARGV[0]
+
+  if Rupi::Pin.watching?
+    trap('SIGINT') { Rupi::Pin.stop_watching }
+    Rupi::Pin.join_watch_thread
+  end
 end

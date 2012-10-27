@@ -1,0 +1,8 @@
+source 'https://rubygems.org'
+
+gem 'rupi'
+
+group :development do
+  gem 'capistrano'
+  gem 'sprinkle'
+end
