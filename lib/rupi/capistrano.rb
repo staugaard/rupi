@@ -65,7 +65,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
 
     task :bundle do
-      run "cd #{deploy_to} && bundle check || bundle install"
+      run "cd #{deploy_to} && bundle check || bundle install --without development test"
     end
   end
 
