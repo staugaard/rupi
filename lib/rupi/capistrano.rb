@@ -1,15 +1,15 @@
 require 'bundler/setup'
-require 'sprinkle'
 
 Capistrano::Configuration.instance(:must_exist).load do
+
+  set :default_shell, "bash -l"
 
   namespace :deploy do
     desc 'prepare your raspberry pi for deployment'
     task :setup do
-      sprinkle_path = Gem.find_files('rupi/sprinkle.rb').first
-      $user = fetch(:user)
-      $raspberypis = find_servers(:roles => :raspberrypi).first.host
-      Sprinkle::Script.sprinkle(File.read(sprinkle_path), sprinkle_path)
+      setup_rvm
+      setup_ruby
+      setup_rupi
 
       run "mkdir -p #{deploy_to}"
 
@@ -18,8 +18,28 @@ Capistrano::Configuration.instance(:must_exist).load do
       setup_service
     end
 
+    task :setup_rvm do
+      run "test -f ~/.rvm/bin/rvm || curl -L get.rvm.io | bash -s stable", :shell => 'sh'
+    end
+
+    task :setup_ruby_dependencies do
+      run 'sudo apt-get -y install build-essential openssl libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev automake libtool bison subversion pkg-config'
+    end
+
+    task :setup_ruby do
+      setup_ruby_dependencies
+      put "install: --no-rdoc --no-ri\nupdate: --no-rdoc --no-ri\n", ".gemrc", :via => :scp
+      run "rvm mount -r https://s3.amazonaws.com/rvm-pi/debian/wheezy_sid/armv6l/#{Rupi::RUBY_VERSION}.tar.bz2 --verify-downloads 1"
+      run "rvm use #{Rupi::RUBY_VERSION} --default"
+    end
+
+    task :setup_rupi do
+      run 'sudo apt-get -y install uvccapture'
+      run 'gem install rupi'
+    end
+
     task :setup_service do
-      run "bash -c 'source /etc/profile.d/rvm.sh && rupi_service install #{deploy_to}/app.rb'"
+      run "rupi_service install #{deploy_to}/app.rb"
     end
 
     desc 'deploy the app'
@@ -45,7 +65,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
 
     task :bundle do
-      run "bash -c 'source /etc/profile.d/rvm.sh && cd #{deploy_to} && bundle check || bundle install --deployment'"
+      run "cd #{deploy_to} && bundle check || bundle install"
     end
   end
 

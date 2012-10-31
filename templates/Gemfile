@@ -4,5 +4,4 @@ gem 'rupi'
 
 group :development do
   gem 'capistrano'
-  gem 'sprinkle'
 end
