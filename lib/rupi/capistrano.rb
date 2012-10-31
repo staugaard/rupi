@@ -34,7 +34,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
 
     task :setup_rupi do
-      run 'sudo apt-get -y install uvccapture'
+      run 'sudo apt-get -y install uvccapture netatalk avahi-daemon libnss-mdns'
       run 'gem install rupi'
     end
 
