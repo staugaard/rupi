@@ -45,10 +45,9 @@ Capistrano::Configuration.instance(:must_exist).load do
 
     desc 'deploy the app'
     task :default do
-      stop
       update_code
       bundle
-      start
+      restart
     end
 
     task :stop do
@@ -57,6 +56,10 @@ Capistrano::Configuration.instance(:must_exist).load do
 
     task :start do
       run "sudo /etc/init.d/rupi_service start"
+    end
+
+    task :restart do
+      run "sudo /etc/init.d/rupi_service restart"
     end
 
     task :update_code do
