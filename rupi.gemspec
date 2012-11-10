@@ -16,7 +16,8 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ['lib']
 
-  gem.add_dependency 'wiringpi'
+  # we have a dependency in wiringpi when executing the app on the pi
+  # gem.add_dependency 'wiringpi'
   gem.add_dependency 'daemons'
   gem.add_dependency 'thor'
 
