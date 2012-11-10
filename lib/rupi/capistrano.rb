@@ -60,7 +60,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
 
     task :update_code do
-      Bundler.root.children.each do |file|
+      Dir.glob(Bundler.root + '*').each do |file|
         upload(file.to_s, "#{deploy_to}", :via => :scp, :recursive => true)
       end
     end
