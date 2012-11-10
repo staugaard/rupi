@@ -1,4 +1,5 @@
 require 'bundler/setup'
+require 'rupi/version'
 
 Capistrano::Configuration.instance(:must_exist).load do
 
